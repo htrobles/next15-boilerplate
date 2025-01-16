@@ -1,23 +1,29 @@
+import 'reflect-metadata';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
 import { ApolloServer } from '@apollo/server';
-import { gql } from 'graphql-tag';
+// import { gql } from 'graphql-tag';
 import { NextRequest } from 'next/server';
+import { buildSchema } from 'type-graphql';
+import RecipeResolver from './resolvers/RecipeResolver';
 
-const resolvers = {
-  Query: {
-    hello: () => 'world',
-  },
-};
+// const resolvers = {
+//   Query: {
+//     hello: () => 'world',
+//   },
+// };
 
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
+const schema = await buildSchema({
+  resolvers: [RecipeResolver],
+});
+
+// const typeDefs = gql`
+//   type Query {
+//     hello: String
+//   }
+// `;
 
 const server = new ApolloServer({
-  resolvers,
-  typeDefs,
+  schema,
 });
 
 // req has the type NextRequest
